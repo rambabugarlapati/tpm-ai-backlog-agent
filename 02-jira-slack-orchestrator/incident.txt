@@ -1,0 +1,3 @@
+From: customer_success@company.com
+Subject: Checkout Page Broken!!
+Body: Urgent! Users are reporting that when they click the 'Pay Now' button, the spinner just spins forever and they get a blank white screen. This is happening on both Chrome and Safari. We are losing sales. Please fix ASAP!
