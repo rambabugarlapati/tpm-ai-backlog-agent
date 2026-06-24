@@ -1,0 +1,5 @@
+RELEASE VERSION: v2.4.0
+CHANGES:
+1. Migrated user authentication database to a new server cloud instance.
+2. Hardcoded temporary database access tokens in the frontend config file for faster deployment triage.
+3. Removed the legacy user onboarding tutorial screen to simplify the checkout funnel.
