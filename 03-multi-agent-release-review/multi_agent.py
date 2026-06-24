@@ -1,25 +1,40 @@
 import os
+import time
 from google import genai
 
+# 1. Initialize the Gemini client
 client = genai.Client()
 
-# Read the raw deployment data
+# Use the highly stable 2.0 flash model
+TARGET_MODEL = 'gemini-2.0-flash'
+
+# 2. Read your sample text file
 with open("release_notes.txt", "r") as f:
     release_content = f.read()
 
-print("🏁 Initiating Multi-Agent Release Review Pipeline...\n")
+print(f"🏁 Initiating Multi-Agent Release Review Pipeline using {TARGET_MODEL}...\n")
 
 # --- AGENT 1: The Security Engineer Agent ---
 prompt_security = f"You are a strict Cyber Security Architect Agent. Review these release notes for critical security flaws or credential leaks. Be brief:\n\n{release_content}"
-response_security = client.models.generate_content(model='gemini-1.5-flash', contents=prompt_security)
+response_security = client.models.generate_content(model=TARGET_MODEL, contents=prompt_security)
 security_report = response_security.text
 print("🛡️ [Security Agent Review Complete]")
+print(f"↳ Findings: {security_report.strip()}\n")
+
+# ⏸️ Pause for 10 seconds to protect free-tier API quotas
+print("⏳ Pausing for 10 seconds to manage API rate limits...")
+time.sleep(10)
 
 # --- AGENT 2: The Product Owner Agent ---
 prompt_product = f"You are a Product Owner Agent. Review these release notes to see if user experience or core product metrics are negatively impacted. Be brief:\n\n{release_content}"
-response_product = client.models.generate_content(model='gemini-1.5-flash', contents=prompt_product)
+response_product = client.models.generate_content(model=TARGET_MODEL, contents=prompt_product)
 product_report = response_product.text
 print("📦 [Product Agent Review Complete]")
+print(f"↳ Findings: {product_report.strip()}\n")
+
+# ⏸️ Pause for 10 seconds to protect free-tier API quotas
+print("⏳ Pausing for 10 seconds to manage API rate limits...")
+time.sleep(10)
 
 # --- AGENT 3: The TPM Coordinator Agent (The Final Gatekeeper) ---
 prompt_tpm = f"""
@@ -36,7 +51,7 @@ Provide your final assessment. Structure your answer exactly like this:
 """
 
 print("🧠 [TPM Coordinator Agent synthesizing reports...]")
-final_response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt_tpm)
+final_response = client.models.generate_content(model=TARGET_MODEL, contents=prompt_tpm)
 
 print("\n🚀 FINAL GO/NO-GO REPORT:")
 print(final_response.text)
